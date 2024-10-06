@@ -1,27 +1,38 @@
-from django.http.response import HttpResponse, JsonResponse   
-from django.shortcuts import render
+from django.http.response import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect
 import random
+from django.urls import reverse
 from .models import *
 # Create your views here.
 from django.http import HttpResponse
 def home(request):
-    return render(request, 'nigga.html ')
-#{    
-#    'status' : True
-#    'data' : [
-#           {},  
-#         ]
-#}
+    context = {'categories': Category.objects.all()}
+    
+    if request.GET.get('category'):
+        category = request.GET.get('category')
+        url = reverse('questions_answers') + f'?category={category}'
+        return redirect(url)
+    
+    return render(request, 'home.html', context)
 
 
 
 
+def questions_answers(request):
+    return render(request, 'home.html')
 
 
 
 def get_questions_answers(request):
     try:
         question_objs = list(Question.objects.all())
+        
+        if request.GET.get('category'):
+            question_objs = question_objs.filter(category_category_name_icontains=request.GET.get('category'))
+        question_objs = list(question_objs)
+        
+        
+        
         data = []
         random.shuffle((question_objs))
         

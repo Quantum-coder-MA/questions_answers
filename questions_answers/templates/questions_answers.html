@@ -1,0 +1,15 @@
+<div class="container">
+    <form action="{% url 'your_view_name' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Select Category</label>
+            <select name="category" class="form-control">
+                <option value="Choose">Choose</option>
+                {% for category in categories %}
+                    <option value="{{category.category_name}}">{{category.category_name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button class="btn btn-danger mt-3">Submit</button>
+    </form>
+</div>
