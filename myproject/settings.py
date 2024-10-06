@@ -36,8 +36,11 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sessions',
+    
         # other default apps
     'questions_answers',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
