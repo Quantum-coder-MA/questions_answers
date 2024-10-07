@@ -15,17 +15,36 @@ def home(request):
     return render(request, 'home.html', context)
 
 def questions_answers(request):
-    return render(request, 'questions_answers.html')
+       
+        question_objs = Question.objects.all()
+        category = "Django"
+        question_objs = question_objs.filter(category__category_name__icontains=category)
+        
+        question_objs = list(question_objs)
+        #random.shuffle(question_objs)
+        
+        data = []
+        for question in question_objs:
+            data.append({
+                "category": question.category.category_name,
+                "question_text": question.question_text,
+                "marks": question.marks,
+                "answer": question.get_Answer()
+            })
+        
+        payload = {'data': data}
+
+        return render(request, 'questions_answers.html', payload)
 
 def get_questions_answers(request):
     try:
         question_objs = Question.objects.all()
-        
+    
         if request.GET.get('category'):
             question_objs = question_objs.filter(category__category_name__icontains=request.GET.get('category'))
         
         question_objs = list(question_objs)
-        random.shuffle(question_objs)
+        #random.shuffle(question_objs)
         
         data = []
         for question in question_objs:
@@ -38,6 +57,7 @@ def get_questions_answers(request):
         
         payload = {'status': True, 'data': data}
         return JsonResponse(payload)
+        return payload
     
     except Exception as e:
         print(e)
