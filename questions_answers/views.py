@@ -17,11 +17,11 @@ def home(request):
 def questions_answers(request):
        
         question_objs = Question.objects.all()
-        category = "Django"
-        question_objs = question_objs.filter(category__category_name__icontains=category)
+        if request.GET.get('category'):
+            question_objs = question_objs.filter(category__category_name__icontains=request.GET.get('category'))
         
         question_objs = list(question_objs)
-        #random.shuffle(question_objs)
+        random.shuffle(question_objs)
         
         data = []
         for question in question_objs:
@@ -57,8 +57,55 @@ def get_questions_answers(request):
         
         payload = {'status': True, 'data': data}
         return JsonResponse(payload)
-        return payload
+        
     
     except Exception as e:
         print(e)
         return HttpResponse("Something went wrong")
+    
+
+
+def submit(request):
+    if request.method == 'POST':
+        user_answers = request.POST
+        score = 0
+        total_marks = 0
+        correct_answers = {}
+
+        
+        for key, value in user_answers.items():
+            if key == 'csrfmiddlewaretoken':  
+                continue
+
+            
+            question = Question.objects.get(question_text=key)
+
+            
+            correct_answer = None
+            for ans in question.get_Answer():
+                if ans['is_correct']:  
+                    correct_answer = ans['answer']
+                    break
+
+            correct_answers[question.question_text] = correct_answer  
+
+            
+            if value == correct_answer:
+                score += question.marks  
+
+            total_marks += question.marks  
+
+        score_percentage = (score / total_marks) * 100 if total_marks > 0 else 0
+
+        context = {
+            'score': score,
+            'total_marks': total_marks,
+            'score_percentage': score_percentage,
+            'correct_answers': correct_answers,
+            'user_answers': user_answers,
+        }
+
+
+
+        return JsonResponse(context)
+

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,7 +9,7 @@
   <body>
     <div class="container mt-5">
       <h1>Quiz for {{data.0.category}} </h1>
-      <form method="POST">
+      <form method="POST" action="/questions_answers/submit/">
         {% csrf_token %}
         {% for question in data %}
           <div class="mb-4">
@@ -17,7 +17,7 @@
             <div>
               {% for yess in question.answer %}
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" value="{{ yess.answer }}" required>
+                  <input class="form-check-input" type="radio" value="{{ yess.answer }}" name="{{question.question_text}}" required>
                   <label class="form-check-label">{{ yess.answer}}</label>
                 </div>
               {% endfor %}
