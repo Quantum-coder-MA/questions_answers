@@ -144,4 +144,3 @@ weasel==0.4.1
 Werkzeug==3.0.3
 whitenoise==6.7.0
 wrapt==1.16.0
-gunicorn==20.1.0
