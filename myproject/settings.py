@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-su34*=lr_v(kfo5l5n4@-7)9^y46yr@vn&yc*iy)ife6k*ot+c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*'] # if you are in dev or docker
 
 
 # Application definition
@@ -128,4 +128,4 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-ALLOWED_HOSTS = ['0.0.0.0']
+ALLOWED_HOSTS = ['*']
