@@ -80,7 +80,6 @@ def get_questions_answers(request):
     except Exception as e:
         print(e)
         return HttpResponse("Something went wrong")
-
 def submit(request):
     if request.method == 'POST':
         user_answers = request.POST
@@ -122,6 +121,61 @@ def submit(request):
         }
 
 
+        #return JsonResponse(context)
+        return render(request, 'submitresult.html', context)
+    
+    
+    
+def submitresult(request):
+    payload = {}
 
-        return JsonResponse(context)
+    if request.method == 'GET':
+        user_answers = request.POST
+        score = 0
+        total_marks = 0
+        correct_answers = {}
 
+        for key, value in user_answers.items():
+            if key == 'csrfmiddlewaretoken':  
+                continue  
+
+            try:
+                question = Question.objects.get(question_text=key)
+            except Question.DoesNotExist:
+                continue 
+
+         
+            correct_answer = None
+            for ans in question.get_Answer(): 
+                if ans['is_correct']:  
+                    correct_answer = ans['answer']
+                    break
+
+        
+            correct_answers[question.question_text] = correct_answer  
+
+            if value == correct_answer:
+                score += question.marks 
+
+            total_marks += question.marks 
+
+        score_percentage = (score / total_marks) * 100 if total_marks > 0 else 0
+
+
+        context = {
+            'score': score,
+            'total_marks': total_marks,
+            'score_percentage': score_percentage,
+            'correct_answers': correct_answers,
+            'user_answers': user_answers,
+        }
+
+      
+        payload = {'status': True, 'data': context}
+
+    else:
+     
+        return render(request, 'submitresult.html', {'error': 'Invalid request method.'})
+    return JsonResponse(payload)
+    #return render(request, 'submitresult.html', payload)
+        

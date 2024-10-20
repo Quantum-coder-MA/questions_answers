@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Result</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"> <!-- Include your CSS file -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .result {
+            margin-bottom: 20px;
+        }
+        .correct {
+            color: black;
+        }
+        .incorrect {
+            color: red;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Quiz Result</h1>
+
+    <div class="result">
+        <h2>Your Score: {{ score }} / {{ total_marks }}</h2>
+        <h3>Score Percentage: {{ score_percentage }}%</h3>
+    </div>
+
+    <h2>Correct Answers:</h2>
+    <ul>
+        {% for question, correct_answer in correct_answers.items %}
+            <li class="correct">{{ question }} - <strong>{{ correct_answer }}</strong></li>
+        {% endfor %}
+    </ul>
+
+    <h2>Your Answers:</h2>
+    <ul>
+        {% for question, user_answer in user_answers.items %}
+        {% if question != "csrfmiddlewaretoken" %}
+
+            <li class="correct">
+                {{ question }} - <strong>{{ user_answer }}</strong>
+            </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+
+    <div class="summary">
+        <h2>Summary:</h2>
+        <p>Thank you for participating in the quiz! Your results have been recorded.</p>
+    </div>
+</div>
+
+</body>
+</html>

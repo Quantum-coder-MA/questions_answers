@@ -11,5 +11,6 @@ urlpatterns = [
     
     path('api/get-questions-answers/', views.get_questions_answers, name='get_questions_answers'),
     path('questions_answers/', views.questions_answers , name="questions_answers"),
-    path("submit/", views.submit , name="form_sbmit")
+    path("submit/", views.submit , name="form_sbmit"),
+    path('submitresult/', views.submitresult , name="form_result")
 ]
